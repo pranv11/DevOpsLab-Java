@@ -1,4 +1,5 @@
 package edu.sjsu;
+import java.util.regex.*;
 
 public class NameChecker {
     /**
@@ -11,27 +12,19 @@ public class NameChecker {
      * @return True if input is a valid name, else false
      */
     public static boolean check(String input) {
-        // Check if input length is within the range of 2 to 40 characters
-        if (input.length() < 2 || input.length() > 40) {
+        String namex = "^[a-zA-Z][a-zA-Z-' ]{0,38}[a-zA-Z]$";
+        Pattern pattern = Pattern.compile(namex);
+        Matcher matcher = pattern.matcher(input);
+
+        if (matcher.find()) {
+            if (input.contains("--") || input.startsWith("-") || input.endsWith("-") || input.startsWith("'") || input.endsWith("'") || input.contains("''") || input.contains(" ")) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
             return false;
         }
-
-        // Check if input contains only alphabetic characters, non-consecutive hyphens, or a single quote
-        for (int i = 0; i < input.length(); i++) {
-            char ch = input.charAt(i);
-            if (!Character.isLetter(ch) && ch != '-' && ch != '\'') {
-                return false;
-            }
-            // Check if the first character is not a hyphen or single quote
-            if (i == 0 && (ch == '-' || ch == '\'')) {
-                return false;
-            }
-            // Check if there are consecutive hyphens or single quotes
-            if (i > 0 && (ch == '-' || ch == '\'') && input.charAt(i - 1) == ch) {
-                return false;
-            }
-        }
-
-        return true; // Input passes all validation checks
     }
+    
 }
